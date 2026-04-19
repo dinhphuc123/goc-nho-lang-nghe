@@ -149,7 +149,19 @@ export async function POST(request: NextRequest) {
 
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
         const systemPrompt = mode === 'parent' ? PARENT_SYSTEM : THAY_PHUC_SYSTEM;
-        const googleKey = process.env.GOOGLE_AI_API_KEY;
+        const getGoogleKey = () => {
+            const keys = [
+                process.env.GOOGLE_AI_API_KEY,
+                process.env.GOOGLE_AI_API_KEY_1,
+                process.env.GOOGLE_AI_API_KEY_2,
+                process.env.GOOGLE_AI_API_KEY_3,
+                process.env.GOOGLE_AI_API_KEY_4,
+                process.env.GOOGLE_AI_API_KEY_5,
+            ].filter(k => k && k !== 'your-google-ai-api-key-here') as string[];
+            return keys.length ? keys[Math.floor(Math.random() * keys.length)] : null;
+        };
+
+        const googleKey = getGoogleKey();
         const openRouterKey = process.env.OPENROUTER_API_KEY;
 
         // 1. Google Gemini (uu tien neu co key)

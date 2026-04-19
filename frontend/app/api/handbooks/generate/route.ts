@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     try {
         const { category, titleHint, target = 'all' } = await request.json();
 
-        if (!category || !['stress', 'relationship', 'bullying', 'emotion'].includes(category)) {
+        if (!category || !['stress', 'relationship', 'bullying', 'emotion', 'nutrition'].includes(category)) {
             return NextResponse.json({ error: 'Chủ đề không hợp lệ.' }, { status: 400 });
         }
 
@@ -85,7 +85,19 @@ export async function POST(request: NextRequest) {
             `Gợi ý tiêu đề từ admin: ${titleHint ?? 'Tự đặt tiêu đề phù hợp'}\n` +
             `Đối tượng: Học sinh ${targetLabel}`;
 
-        const geminiKey = process.env.GOOGLE_AI_API_KEY;
+        const getGeminiKey = () => {
+            const keys = [
+                process.env.GOOGLE_AI_API_KEY,
+                process.env.GOOGLE_AI_API_KEY_1,
+                process.env.GOOGLE_AI_API_KEY_2,
+                process.env.GOOGLE_AI_API_KEY_3,
+                process.env.GOOGLE_AI_API_KEY_4,
+                process.env.GOOGLE_AI_API_KEY_5,
+            ].filter(k => k && k !== 'your-google-ai-api-key-here') as string[];
+            return keys.length ? keys[Math.floor(Math.random() * keys.length)] : null;
+        };
+
+        const geminiKey = getGeminiKey();
         const openRouterKey = process.env.OPENROUTER_API_KEY;
 
         let rawText = '';

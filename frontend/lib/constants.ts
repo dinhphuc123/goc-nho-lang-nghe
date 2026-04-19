@@ -64,6 +64,7 @@ export const ARTICLE_CATEGORY_LABELS: Record<string, string> = {
     relationship: 'Quan hệ bạn bè',
     bullying: 'Bạo lực học đường',
     emotion: 'Cảm xúc & Sức khỏe',
+    nutrition: 'Tư vấn Dinh dưỡng',
 };
 
 // OpenRouter models — thu lan luot neu model truoc bao loi
