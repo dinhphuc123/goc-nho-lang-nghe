@@ -17,8 +17,9 @@ async function verifyAdmin(request: NextRequest) {
 
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     const user = await verifyAdmin(request);
     if (!user) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -40,7 +41,7 @@ export async function PATCH(
         const { data, error } = await supabaseAdmin
             .from('letters')
             .update(allowedFields)
-            .eq('id', params.id)
+            .eq('id', id)
             .select()
             .single();
 
@@ -54,15 +55,16 @@ export async function PATCH(
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     const user = await verifyAdmin(request);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { data, error } = await supabaseAdmin
         .from('letters')
         .select('*, responses!responses_letter_id_fkey(*)')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
 
     if (error) return NextResponse.json({ error: 'Không tìm thấy thư.' }, { status: 404 });
