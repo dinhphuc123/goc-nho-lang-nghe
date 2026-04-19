@@ -1,0 +1,205 @@
+# Frontend: Góc Nhỏ Lắng Nghe
+
+Ứng dụng tư vấn tâm lý học đường số hóa — kín đáo, ẩn danh, 24/7. Dựa theo Spec v1.1 và Frontend Agent Guide (Next.js 14 + TypeScript + Tailwind + shadcn/ui).
+
+> **Trường triển khai:** PTDTNT Phường Hàm Thắng, Lâm Đồng
+
+---
+
+## Proposed Changes
+
+### Foundation — Setup & Config
+
+#### [MODIFY] frontend/ — Khởi tạo Next.js 14 project
+
+Chạy `create-next-app` với TypeScript, Tailwind, App Router. Cài thêm:
+- `shadcn/ui` (components)
+- `zustand` (state)
+- `@tanstack/react-query` (server state)
+- `react-hook-form` + `zod` (forms)
+- `framer-motion` (animation)
+- `lucide-react` (icons)
+- `next-pwa` (PWA support)
+- `@supabase/supabase-js` (database + auth)
+
+---
+
+### Design System
+
+#### [NEW] src/assets/styles/globals.css
+CSS variables cho toàn bộ color palette theo spec:
+- `--color-primary: #1a1a2e` (card Tư vấn AI)
+- `--color-gratitude: #fce4ec` / `#e91e8c` (hộp Biết ơn)
+- `--color-handbook: #e8f5e9` (Cẩm nang)
+- `--color-parent: #e3f2fd` (Phụ huynh)
+- `--color-danger: #b71c1c` / `#d32f2f` (cảnh báo an toàn)
+- Font: Merriweather (serif, tiêu đề) + Inter (sans-serif, body)
+
+---
+
+### Layout & Navigation
+
+#### [NEW] src/components/layout/Header.tsx
+Horizontal navbar với đầy đủ links theo spec:
+`Logo | Trang chủ | Tư vấn AI | Gửi thư | Tra cứu | Cẩm nang | Biết ơn | Phụ huynh | Giới thiệu | [Tải app]`
+
+Mobile: hamburger menu responsive.
+
+#### [NEW] src/app/layout.tsx
+Root layout: font loading, QueryClientProvider, metadata (SEO + PWA manifest).
+
+---
+
+### Pages — Student Side
+
+#### [NEW] src/app/page.tsx — Trang chủ
+- Hero section: 2 cột (slogan trái + illustration phải)
+- Feature grid 3×2 với 6 cards màu sắc theo spec
+- Mỗi card: emoji icon + tiêu đề + mô tả + nút CTA
+
+#### [NEW] src/app/tu-van-ai/page.tsx — Phòng Tư Vấn AI (Thầy Phúc)
+- **Màn hình 1:** Chọn danh tính (ẩn danh #XXXX vs để tên)
+- **Màn hình 2:** Chat UI với Cô Minh — chip gợi ý chủ đề + ô nhập
+- **Màn hình 3 (modal đỏ):** Safety Screen — kích hoạt tự động khi phát hiện từ nguy hiểm
+
+#### [NEW] src/app/gui-thu/page.tsx — Gửi Thư Hỗ Trợ
+- Header danh tính + cảm xúc auto-detect
+- Banner bảo mật
+- Textarea lớn + nút gửi
+- Hiển thị mã tracking sau khi gửi
+
+#### [NEW] src/app/tra-cuu/page.tsx — Tra Cứu Báo Cáo
+- Input mã 6 ký tự
+- Hiển thị status + phản hồi từ thầy cô
+
+#### [NEW] src/app/biet-on/page.tsx — Hộp Thư Biết Ơn
+- Form 3 trường: gửi đến ai + lời nhắn + người gửi (optional)
+- Màu hồng, nút "Gửi đi yêu thương"
+
+#### [NEW] src/app/cam-nang/page.tsx — Cẩm Nang Tâm Lý
+- Danh sách bài theo 4 chủ đề, filter bằng tab
+- Tags màu theo spec (stress/relation/bully/emotion)
+- Bấm vào → trang đọc bài markdown
+
+#### [NEW] src/app/cam-nang/[id]/page.tsx — Chi tiết bài Cẩm nang
+- Markdown render + banner "Cần chia sẻ thêm?"
+
+#### [NEW] src/app/phu-huynh/page.tsx — Góc Phụ Huynh
+- Chat AI riêng với 4 gợi ý chủ đề về tâm lý tuổi teen
+
+#### [NEW] src/app/gioi-thieu/page.tsx — Giới thiệu dự án
+
+---
+
+### Pages — Admin Dashboard
+
+#### [NEW] src/app/(admin)/layout.tsx
+Layout admin với sidebar navigation (auth protected).
+
+#### [NEW] src/app/(admin)/dashboard/page.tsx
+- 4 metric cards: thư hôm nay, khẩn cấp, chưa phản hồi 48h, đã giải quyết tháng
+- Bar chart 7 ngày (CSS flexbox, không dùng thư viện)
+- Danh sách thư với filter + badge màu
+- Panel chi tiết khi bấm vào thư
+
+#### [NEW] src/app/(admin)/cam-nang/page.tsx — Quản lý bài viết
+- Form tạo bài: chủ đề dropdown + gợi ý tiêu đề + nút "AI soạn nháp"
+- Gọi Claude API → hiển thị trong editor
+- Nút: Soạn lại / Lưu nháp / Xuất bản
+
+#### [NEW] src/app/(admin)/gratitude/page.tsx — Xem hộp biết ơn
+
+#### [NEW] src/app/(auth)/login/page.tsx — Admin login
+
+---
+
+### Features — Business Logic
+
+#### [NEW] src/features/ai-chat/
+- `components/ChatInterface.tsx` — UI chat (Server/Client split)
+- `components/SafetyScreen.tsx` — Modal đỏ cảnh báo an toàn
+- `components/IdentitySelector.tsx` — Màn hình chọn danh tính
+- `hooks/useSafetyDetection.ts` — Phát hiện từ khóa nguy hiểm
+- `hooks/useEmotionDetection.ts` — Phát hiện cảm xúc tự động
+
+#### [NEW] src/features/letters/
+- `components/LetterForm.tsx` — Form gửi thư
+- `components/TrackingResult.tsx` — Kết quả tra cứu
+- `hooks/useLetterSubmit.ts` — Submit + tracking code
+
+#### [NEW] src/features/admin/
+- `components/LetterList.tsx` — Danh sách thư với badge
+- `components/LetterDetail.tsx` — Panel chi tiết + phản hồi
+- `components/MetricCard.tsx` — Metric cards dashboard
+- `components/WeeklyChart.tsx` — Bar chart CSS
+
+---
+
+### API Layer
+
+#### [NEW] src/api/endpoints/letters.api.ts
+CRUD letters, tracking lookup, status update.
+
+#### [NEW] src/api/endpoints/ai.api.ts
+- `/api/chat` — Gọi Claude API (Haiku) cho Cô Minh / Góc Phụ Huynh
+- `/api/handbooks/generate` — Soạn bài Cẩm nang (Claude Sonnet)
+
+#### [NEW] src/app/api/chat/route.ts — API Route Next.js
+Proxy Claude API để bảo vệ API key, không expose ra client.
+
+#### [NEW] src/api/endpoints/gratitude.api.ts
+Submit và list gratitude letters.
+
+---
+
+### Types & Config
+
+#### [NEW] src/types/index.ts
+TypeScript types cho: `Letter`, `Response`, `Admin`, `GratitudeMessage`, `Article`, `RiskLevel`, `LetterStatus`, `ArticleCategory`.
+
+#### [NEW] src/lib/constants.ts
+Danh sách từ khóa nguy hiểm (safety detection), màu sắc tags.
+
+#### [NEW] src/lib/validations.ts
+Zod schemas cho tất cả forms.
+
+#### [NEW] next.config.ts
+PWA config với `next-pwa`, env vars, image domains.
+
+#### [NEW] public/manifest.json
+PWA manifest: name "Góc Nhỏ Lắng Nghe", icon, theme_color.
+
+---
+
+## Verification Plan
+
+### Automated Tests
+Hiện tại chưa có test files. Sau khi build sẽ verify bằng:
+
+```bash
+# Chạy dev server
+cd g:\AI\fullstack-project\frontend
+npm run dev
+
+# TypeScript check (không lỗi type)
+npx tsc --noEmit
+
+# Lint check
+npm run lint
+```
+
+### Manual Verification (Browser)
+
+| Tính năng | Bước kiểm tra |
+|-----------|---------------|
+| Trang chủ | Mở `http://localhost:3000` → thấy 6 card tính năng |
+| Tư vấn AI | Click card → chọn ẩn danh → gõ chat với Thày Phúc |
+| Safety Screen | Nhập "tôi không muốn sống nữa" → phải hiện modal đỏ + số 111 |
+| Gửi thư | Điền form → gửi → nhận mã tracking 6 ký tự |
+| Tra cứu | Nhập mã → xem status |
+| Hộp Biết Ơn | Điền form hồng → gửi thành công |
+| Cẩm nang | Xem danh sách → click vào bài → đọc markdown |
+| Góc Phụ huynh | Chat với AI, thấy 4 gợi ý chủ đề |
+| Admin login | Vào `/admin` → redirect về login |
+| Responsive | Resize < 768px → navbar collapse, grid 1 cột |
+| PWA | Trên mobile Chrome → thấy "Thêm vào màn hình chính" |
