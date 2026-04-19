@@ -79,6 +79,27 @@ PHONG CACH GIAO TIEP:
 - TUYET DOI KHONG dung markdown (*, -, #) hay danh so. Khong in dam, khong gach dau dong.
 `.trim();
 
+const rateLimitMap = new Map<string, { count: number, resetTime: number }>();
+
+function checkRateLimit(ip: string): boolean {
+    const now = Date.now();
+    const windowMs = 60 * 1000; // 1 minute
+    const maxRequests = 20;
+
+    const record = rateLimitMap.get(ip);
+    if (!record || record.resetTime < now) {
+        rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
+        return true;
+    }
+
+    if (record.count >= maxRequests) {
+        return false;
+    }
+
+    record.count += 1;
+    return true;
+}
+
 function detectDanger(text: string): boolean {
     const lower = text.toLowerCase();
     return DANGER_KEYWORDS.some(kw => lower.includes(kw));
@@ -140,6 +161,11 @@ async function callOpenRouter(model: string, messages: object[], systemPrompt: s
 
 export async function POST(request: NextRequest) {
     try {
+        const ip = request.headers.get('x-forwarded-for') || 'anonymous';
+        if (!checkRateLimit(ip)) {
+            return NextResponse.json({ error: 'Quá nhiều yêu cầu. Vui lòng thử lại sau 1 phút.' }, { status: 429 });
+        }
+
         const { messages, mode = 'student' } = await request.json();
 
         const lastMsg = messages[messages.length - 1];

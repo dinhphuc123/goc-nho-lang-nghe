@@ -12,6 +12,19 @@ async function verifyAdmin(request: NextRequest) {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     const { data: { user } } = await supabase.auth.getUser(token);
+    if (!user) return null;
+
+    // 🔒 Security: Check role và is_active trong database
+    const { data: adminData } = await supabaseAdmin
+        .from('admins')
+        .select('role')
+        .eq('id', user.id)
+        .eq('is_active', true)
+        .single();
+
+    if (!adminData || !['admin', 'counselor'].includes(adminData.role)) {
+        return null;
+    }
     return user;
 }
 
