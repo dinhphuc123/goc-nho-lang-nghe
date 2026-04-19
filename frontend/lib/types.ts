@@ -5,7 +5,7 @@
 export type RiskLevel = 'normal' | 'attention' | 'urgent';
 export type LetterStatus = 'pending' | 'in_progress' | 'resolved';
 export type UserRole = 'counselor' | 'admin' | 'viewer';
-export type ArticleCategory = 'stress' | 'relationship' | 'bullying' | 'emotion';
+export type ArticleCategory = 'stress' | 'relationship' | 'bullying' | 'emotion' | 'nutrition';
 export type ArticleTarget = 'thcs' | 'thpt' | 'all';
 export type ArticleStatus = 'draft' | 'published';
 

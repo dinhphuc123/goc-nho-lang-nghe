@@ -12,6 +12,7 @@ const TABS: { key: ArticleCategory | 'all'; label: string }[] = [
     { key: 'relationship', label: 'Quan hệ bạn bè' },
     { key: 'bullying', label: 'Bạo lực học đường' },
     { key: 'emotion', label: 'Cảm xúc & Sức khỏe' },
+    { key: 'nutrition', label: 'Tư vấn Dinh dưỡng' },
 ];
 
 export default function CamNangPage() {
@@ -90,9 +91,6 @@ export default function CamNangPage() {
                 )}
             </div>
 
-            <style>{`
-        @media (max-width: 640px) { .articles-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
         </div>
     );
 }

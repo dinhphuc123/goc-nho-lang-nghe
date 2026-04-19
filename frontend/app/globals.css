@@ -45,6 +45,9 @@
   --color-tag-bully-text: #a32d2d;
   --color-tag-emotion-bg: #faeeda;
   --color-tag-emotion-text: #854f0b;
+  /* Nutrition — Xanh cyan */
+  --color-tag-nutrition-bg: #e0f7fa;
+  --color-tag-nutrition-text: #006064;
 
   /* === Typography === */
 
@@ -224,6 +227,11 @@ a {
     color: var(--color-tag-emotion-text);
   }
 
+  .tag-nutrition {
+    background: var(--color-tag-nutrition-bg);
+    color: var(--color-tag-nutrition-text);
+  }
+
   /* Prose content */
   .prose h2 {
     font-size: 1.4rem;
@@ -317,6 +325,42 @@ a {
   animation-delay: 0.2s;
 }
 
-.typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
+/* ============================================
+   RESPONSIVE UTILS
+   ============================================ */
+
+/* Hero section — stack on mobile */
+@media (max-width: 767px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-cta-row {
+    flex-direction: column !important;
+  }
+}
+
+/* Feature cards grid */
+@media (max-width: 640px) {
+  .grid-features {
+    grid-template-columns: 1fr !important;
+  }
+
+  .articles-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  .grid-features {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Card hover — disable on touch devices */
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+  }
 }

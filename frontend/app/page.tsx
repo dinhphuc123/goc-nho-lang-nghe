@@ -62,43 +62,47 @@ const features = [
 export default function HomePage() {
   return (
     <div>
-      {/* Hero Section */}
+      {/* ===== HERO SECTION ===== */}
       <section style={{
         background: 'linear-gradient(135deg, #1a1a2e 0%, #2d2d4e 50%, #1a1a3e 100%)',
         color: 'white',
-        padding: '80px 0 100px',
+        padding: 'clamp(48px, 8vw, 80px) 0 clamp(56px, 10vw, 100px)',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* Background decoration */}
+        {/* Background blobs */}
         <div style={{
           position: 'absolute', top: '-100px', right: '-100px',
           width: 400, height: 400, borderRadius: '50%',
           background: 'rgba(255,255,255,0.03)',
+          pointerEvents: 'none',
         }} />
         <div style={{
           position: 'absolute', bottom: '-80px', left: '-80px',
           width: 300, height: 300, borderRadius: '50%',
           background: 'rgba(233,30,140,0.1)',
+          pointerEvents: 'none',
         }} />
 
         <div className="container-app" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
-            {/* Text */}
+          {/* hero-grid class handled by globals.css — responsive 2col → 1col */}
+          <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(24px, 5vw, 48px)', alignItems: 'center' }}>
+
+            {/* ── Left: Text ── */}
             <div className="animate-fade-in">
               <div style={{
                 display: 'inline-block', marginBottom: 16,
                 padding: '6px 16px', borderRadius: 999,
                 background: 'rgba(255,255,255,0.1)',
-                fontSize: 13, fontWeight: 500, letterSpacing: '0.05em',
-                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%',
+                fontSize: 12, fontWeight: 500, letterSpacing: '0.05em',
+                maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
               }}>
-                🏫 TRƯỜNG PHỔ THÔNG DÂN TỘC NỘI TRÚ, PHƯỜNG HÀM THẮNG, LÂM ĐỒNG
+                🏫 TRƯỜNG PHỔ THÔNG DÂN TỘC NỘI TRÚ — HÀM THẮNG, LÂM ĐỒNG
               </div>
 
               <h1 style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontSize: 'clamp(1.8rem, 5vw, 3rem)',
                 fontWeight: 700,
                 lineHeight: 1.2,
                 marginBottom: 20,
@@ -108,32 +112,33 @@ export default function HomePage() {
               </h1>
 
               <p style={{
-                fontSize: '1.1rem',
+                fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
                 color: 'rgba(255,255,255,0.82)',
-                lineHeight: 1.7,
+                lineHeight: 1.75,
                 marginBottom: 32,
-                maxWidth: 480,
+                maxWidth: '100%',
               }}>
                 Không gian an toàn, kín đáo và ẩn danh để em chia sẻ những điều khó nói nhất.
                 Góc Nhỏ luôn ở đây, <strong style={{ color: '#fce4ec' }}>24/7</strong>.
               </p>
 
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              {/* hero-cta-row: row → column on mobile */}
+              <div className="hero-cta-row" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <Link href="/tu-van-ai" className="btn" style={{
                   background: 'white', color: '#1a1a2e',
-                  padding: '14px 28px', fontSize: 15,
+                  padding: '13px 24px', fontSize: 15,
                 }}>
                   <Bot size={18} /> Trò chuyện với Thầy Phúc
                 </Link>
                 <Link href="/gui-thu" className="btn btn-outline" style={{
-                  borderColor: 'rgba(255,255,255,0.5)', color: 'white', padding: '14px 24px',
+                  borderColor: 'rgba(255,255,255,0.5)', color: 'white', padding: '13px 22px',
                 }}>
                   <Mail size={18} /> Gửi thư ẩn danh
                 </Link>
               </div>
 
               {/* Trust badges */}
-              <div style={{ display: 'flex', gap: 20, marginTop: 32, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 16, marginTop: 28, flexWrap: 'wrap' }}>
                 {[
                   { icon: <Shield size={14} />, label: 'Hoàn toàn ẩn danh' },
                   { icon: <PhoneCall size={14} />, label: 'Đường dây 111 miễn phí' },
@@ -149,17 +154,18 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Illustration placeholder */}
+            {/* ── Right: Illustration (ẩn trên mobile) ── */}
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              height: 340,
+              height: 320,
             }} className="hidden md:flex">
               <div style={{
-                width: 280, height: 280, borderRadius: '50%',
+                width: 260, height: 260, borderRadius: '50%',
                 background: 'rgba(255,255,255,0.06)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 border: '1px solid rgba(255,255,255,0.1)',
                 fontSize: 80,
+                boxShadow: '0 0 60px rgba(233,30,140,0.15)',
               }}>
                 💙
               </div>
@@ -168,18 +174,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section style={{ padding: '64px 0 80px' }}>
+      {/* ===== FEATURES GRID ===== */}
+      <section style={{ padding: 'clamp(40px, 6vw, 64px) 0 clamp(48px, 8vw, 80px)' }}>
         <div className="container-app">
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', marginBottom: 12 }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(28px, 4vw, 48px)' }}>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.4rem, 3vw, 1.8rem)', marginBottom: 10 }}>
               Em cần điều gì hôm nay?
             </h2>
-            <p style={{ color: '#666', fontSize: 16 }}>
+            <p style={{ color: '#666', fontSize: 15 }}>
               Chọn một tính năng phù hợp với em nhé
             </p>
           </div>
 
+          {/* grid-features responsive class in globals.css */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
@@ -197,7 +204,7 @@ export default function HomePage() {
               }}>
                 {f.featured && (
                   <div style={{
-                    position: 'absolute', top: 16, right: 16,
+                    position: 'absolute', top: 14, right: 14,
                     background: 'rgba(255,255,255,0.15)',
                     padding: '2px 10px', borderRadius: 999,
                     fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.8)',
@@ -205,30 +212,27 @@ export default function HomePage() {
                     ⭐ Nổi bật
                   </div>
                 )}
-                <div style={{
-                  marginBottom: 16,
-                  opacity: f.featured ? 0.9 : 0.7,
-                }}>
+                <div style={{ marginBottom: 14, opacity: f.featured ? 0.9 : 0.7 }}>
                   {f.icon}
                 </div>
                 <h3 style={{
-                  fontFamily: 'var(--font-serif)', fontSize: '1.1rem',
-                  fontWeight: 700, marginBottom: 10,
+                  fontFamily: 'var(--font-serif)', fontSize: '1.05rem',
+                  fontWeight: 700, marginBottom: 8,
                 }}>
                   {f.title}
                 </h3>
                 <p style={{
-                  fontSize: '0.9rem',
-                  lineHeight: 1.6,
-                  opacity: f.featured ? 0.85 : 0.7,
-                  flex: 1, marginBottom: 20,
+                  fontSize: '0.875rem',
+                  lineHeight: 1.65,
+                  opacity: f.featured ? 0.85 : 0.68,
+                  flex: 1, marginBottom: 18,
                 }}>
                   {f.desc}
                 </p>
                 <Link href={f.href} className="btn" style={{
                   background: f.btnBg,
                   color: f.featured ? 'rgba(255,255,255,0.9)' : 'white',
-                  fontSize: 13, padding: '10px 20px', alignSelf: 'flex-start',
+                  fontSize: 13, padding: '10px 18px', alignSelf: 'flex-start',
                 }}>
                   Vào ngay →
                 </Link>
@@ -238,16 +242,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Emergency Banner */}
+      {/* ===== EMERGENCY BANNER ===== */}
       <section style={{
         background: '#fff8e1',
         borderTop: '1px solid #ffe082',
         borderBottom: '1px solid #ffe082',
-        padding: '20px 0',
+        padding: '18px 0',
       }}>
-        <div className="container-app" style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 24 }}>📞</span>
-          <div>
+        <div className="container-app" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 24, flexShrink: 0 }}>📞</span>
+          <div style={{ flex: 1, minWidth: 180 }}>
             <strong style={{ fontSize: 15 }}>Cần hỗ trợ khẩn cấp?</strong>
             <span style={{ marginLeft: 8, color: '#555', fontSize: 14 }}>
               Gọi ngay Tổng đài Quốc gia Bảo vệ Trẻ em
@@ -255,32 +259,22 @@ export default function HomePage() {
           </div>
           <a href="tel:111" className="btn" style={{
             background: 'var(--color-danger-btn)', color: 'white',
-            padding: '8px 20px', fontSize: 14, marginLeft: 'auto',
+            padding: '8px 20px', fontSize: 14, flexShrink: 0,
           }}>
             📞 111 — Miễn phí 24/7
           </a>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer style={{ padding: '32px 0', textAlign: 'center', color: '#888', fontSize: 13 }}>
+      {/* ===== FOOTER ===== */}
+      <footer style={{ padding: '28px 0', textAlign: 'center', color: '#888', fontSize: 13 }}>
         <div className="container-app">
           <p>💙 Góc Nhỏ Lắng Nghe — TRƯỜNG PHỔ THÔNG DÂN TỘC NỘI TRÚ, PHƯỜNG HÀM THẮNG, LÂM ĐỒNG</p>
-          <p style={{ marginTop: 6 }}>
+          <p style={{ marginTop: 6, fontStyle: 'italic' }}>
             &quot;Mỗi thư gửi đến là một học sinh đang dũng cảm lên tiếng.&quot;
           </p>
         </div>
       </footer>
-
-      {/* Responsive grid mobile */}
-      <style>{`
-        @media (max-width: 768px) {
-          .grid-features { grid-template-columns: 1fr !important; }
-        }
-        @media (min-width: 769px) and (max-width: 1024px) {
-          .grid-features { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-      `}</style>
     </div>
   );
 }
